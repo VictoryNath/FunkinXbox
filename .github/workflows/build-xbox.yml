@@ -15,6 +15,10 @@ jobs:
           haxelib install lime
           haxelib install openfl
           haxelib install flixel
+          haxelib install hscript
+          haxelib install flixel-addons
+          haxelib install flixel-ui
+          haxelib install hxp
           haxelib run lime setup
 
       - name: Compile Game
