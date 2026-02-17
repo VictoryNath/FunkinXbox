@@ -24,13 +24,14 @@ jobs:
           haxelib install flixel-ui 2.5.0 --silent
           haxelib install hscript 2.5.0 --silent
           haxelib install hxp 1.1.3 --silent
-          haxelib install flixel-tools --silent
           haxelib install tjson --silent
+          haxelib install flixel-tools --silent
           haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git --quiet
           haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git --quiet
           haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git --quiet
           haxelib git grig.audio https://github.com/grig-org/grig.audio.git --quiet
           haxelib run lime setup
+          haxelib set flixel-tools 1.5.1
           echo y | haxelib run flixel-tools setup
         shell: cmd
 
