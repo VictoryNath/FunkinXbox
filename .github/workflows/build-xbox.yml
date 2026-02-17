@@ -32,8 +32,11 @@ jobs:
           haxelib run lime setup
         shell: cmd
 
+      - name: Patch Project File
+        run: powershell -Command "(Get-Content Project.hx) -replace ' \?', '' | Set-Content Project.hx"
+
       - name: Compile Game
-        run: haxelib run lime build windows -release -D official_build -D no-deprecation-warnings
+        run: haxelib run lime build windows -release -D official_build
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
