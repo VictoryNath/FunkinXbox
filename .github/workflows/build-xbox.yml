@@ -10,53 +10,34 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        submodules: true
+        submodules: true # Important pour les librairies git
 
     - name: Setup Haxe
       uses: krdlab/setup-haxe@v1
       with:
-        haxe-version: 4.2.5
+        haxe-version: 4.3.4 # On repasse en 4.3.4 pour le support du '?'
 
     - name: Install Dependencies
       shell: cmd
       run: |
-        git config --global http.postBuffer 524288000
-        haxelib install lime 7.9.0
-        haxelib install openfl 9.1.0
-        haxelib install flixel 5.2.2
-        haxelib install flixel-addons 3.0.2
-        haxelib install flixel-ui 2.5.0
-        haxelib install hscript 2.5.0
+        :: On installe les versions standard (Lime 8+ est requis par ton projet)
+        haxelib install lime
+        haxelib install openfl
+        haxelib install flixel
+        haxelib install flixel-addons
+        haxelib install flixel-ui
+        haxelib install hscript
         haxelib install tjson
-        haxelib install hxcpp 4.2.1
-        haxelib install hxp 1.1.2
+        haxelib install hxcpp
+        haxelib install hxp
+        
+        :: Installation des repos Git (Correction des erreurs de clone)
         haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git --quiet
         haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git --quiet
         haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git --quiet
         haxelib git grig.audio https://github.com/grig-org/grig.audio.git --quiet
+        
         haxelib run lime setup
-
-    - name: Sanitize Project Script
-      shell: pwsh
-      run: |
-        $path = "project.hxp"
-        if (Test-Path $path) {
-            Write-Host "Found project.hxp. Patching for Haxe 4.2.5 compatibility..."
-            $content = Get-Content $path -Raw
-            
-            # Remplace le 'Safe Navigation' (?. -> .)
-            # Ex: object?.field devient object.field
-            $content = $content -replace '\?\.', '.'
-            
-            # Remplace le 'Null Coalescing' (?? -> ||)
-            # Ex: value ?? default devient value || default
-            $content = $content -replace '\?\?', '||'
-            
-            Set-Content -Path $path -Value $content
-            Write-Host "Patch applied successfully."
-        } else {
-            Write-Host "Warning: project.hxp not found in root."
-        }
 
     - name: Setup MSVC
       uses: ilammy/msvc-dev-cmd@v1
@@ -66,10 +47,11 @@ jobs:
     - name: Export UWP project
       shell: cmd
       run: |
-        haxelib run lime build windows -uwp -release -D official_build
+        :: On utilise la commande native de Lime pour l'UWP
+        haxelib run lime build uwp -release -D official_build
         
     - name: Upload project
       uses: actions/upload-artifact@v4
       with:
         name: Funkin-UWP-Project
-        path: export/release/windows/uwp/bin
+        path: export/release/uwp/bin
