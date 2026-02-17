@@ -33,7 +33,7 @@ jobs:
         shell: cmd
 
       - name: Compile Game
-        run: haxelib run lime build windows -release -D official_build
+        run: haxelib run lime build windows -release -D official_build -D no-deprecation-warnings
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
