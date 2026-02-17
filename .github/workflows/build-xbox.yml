@@ -41,5 +41,3 @@ jobs:
         with:
           name: FridayNightFunkin-Xbox
           path: export/release/windows/bin
-          name: FridayNightFunkin-Xbox
-          path: export/release/windows/bin
