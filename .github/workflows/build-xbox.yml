@@ -32,13 +32,9 @@ jobs:
           haxelib run lime setup
         shell: cmd
 
-      - name: Patch Project Files
-        run: |
-          powershell -Command "Get-ChildItem -Recurse Project.hx | ForEach-Object { (Get-Content $_.FullName) -replace ' \?', '' | Set-Content $_.FullName }"
-        shell: cmd
-
       - name: Compile Game
-        run: haxelib run lime build windows -release -D official_build
+        run: haxelib run lime build windows -release -D official_build --macro "allowPackage('flash')" --macro "noDotPathCheck()"
+        shell: cmd
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
