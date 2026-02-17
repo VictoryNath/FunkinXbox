@@ -33,7 +33,7 @@ jobs:
         shell: cmd
 
       - name: Compile Game
-        run: haxelib run lime build windows -release
+        run: haxelib run lime build windows -release --haxeflag "--macro nullSafety('off')"
         shell: cmd
 
       - name: Upload Artifact
