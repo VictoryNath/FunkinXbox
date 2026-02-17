@@ -33,7 +33,7 @@ jobs:
         shell: cmd
 
       - name: Compile Game
-        run: haxelib run lime build windows -release -D official_build --macro "allowPackage('flash')" --macro "noDotPathCheck()"
+        run: haxelib run lime build windows -release
         shell: cmd
 
       - name: Upload Artifact
