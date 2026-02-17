@@ -17,18 +17,18 @@ jobs:
       with:
         haxe-version: 4.2.5
 
-    - name: Install Haxelib dependencies
+    - name: Install Legacy Dependencies
       shell: cmd
       run: |
-        haxelib install lime 7.8.0
-        haxelib install openfl 9.1.0
-        haxelib install flixel 5.2.2
-        haxelib install flixel-addons 3.0.2
-        haxelib install flixel-ui 2.5.0
-        haxelib install hscript 2.5.0
-        haxelib install tjson
+        haxelib install lime 7.7.0
+        haxelib install openfl 9.0.2
+        haxelib install flixel 4.11.0
+        haxelib install flixel-addons 2.11.0
+        haxelib install flixel-ui 2.4.0
+        haxelib install hscript 2.4.0
+        haxelib install tjson 1.4.0
         haxelib install hxcpp 4.2.1
-        haxelib install hxp 1.1.2
+        haxelib install hxp 1.1.0
         haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git
         haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git
         haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git
@@ -43,7 +43,7 @@ jobs:
     - name: Export UWP project
       shell: cmd
       run: |
-        haxelib run lime build windows -uwp -release -D official_build
+        haxelib run lime build windows -uwp -release -D official_build -v
         
     - name: Upload project
       uses: actions/upload-artifact@v4
