@@ -7,11 +7,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: true # Important
 
       - name: Setup Haxe
         uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.3.4
+
+      - name: Configure Git
+        run: |
+          git config --global core.askpass ""
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
 
       - name: Install Libraries
         run: |
@@ -23,10 +30,11 @@ jobs:
           haxelib install hscript 2.5.0
           haxelib install hxp 1.1.3
           haxelib install flixel-tools
-          haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate
-          haxelib git linc_luajit https://github.com/superpowers04/linc_luajit
-          haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis
-          haxelib git grig.audio https://github.com/grig-org/grig.audio
+          haxelib install tjson
+          haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git
+          haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git
+          haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git
+          haxelib git grig.audio https://github.com/grig-org/grig.audio.git
           haxelib run lime setup
           haxelib run flixel-tools setup -y
 
