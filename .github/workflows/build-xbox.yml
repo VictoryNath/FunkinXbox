@@ -1,4 +1,4 @@
-name: Build FNF for Xbox/Win
+name: Build FNF 0.8.1 for Xbox
 on: [push]
 
 jobs:
@@ -13,14 +13,14 @@ jobs:
       - name: Setup Haxe
         uses: krdlab/setup-haxe@v1
         with:
-          haxe-version: 4.3.4
+          haxe-version: 4.2.5
 
       - name: Install Libraries
         run: |
-          haxelib install lime 8.0.0
-          haxelib install openfl 9.2.2
-          haxelib install flixel 5.5.0
-          haxelib install flixel-addons 3.2.1
+          haxelib install lime 7.9.0
+          haxelib install openfl 9.2.1
+          haxelib install flixel 5.2.2
+          haxelib install flixel-addons 3.0.2
           haxelib install flixel-ui 2.5.0
           haxelib install hscript 2.5.0
           haxelib install hxp 1.1.3
