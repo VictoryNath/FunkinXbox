@@ -1,0 +1,21 @@
+name: Build FNF for Windows/Xbox
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.2.5
+      
+      - name: Install Libs
+        run: |
+          haxelib install lime
+          haxelib install openfl
+          haxelib install flixel
+          haxelib run lime setup
+
+      - name: Compile Game
+        run: haxelib run lime build windows -release
