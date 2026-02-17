@@ -28,6 +28,7 @@ jobs:
         haxelib install hscript
         haxelib install tjson
         haxelib install hxcpp
+        haxelib install hxp
         haxelib run hxcpp build
 
         haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git
