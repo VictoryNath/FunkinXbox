@@ -33,6 +33,7 @@ jobs:
           haxelib run lime setup
           echo y > input.txt
           echo n >> input.txt
+          echo 4 >> input.txt
           type input.txt | haxelib run flixel-tools setup
         shell: cmd
 
