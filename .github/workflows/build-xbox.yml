@@ -33,9 +33,7 @@ jobs:
         shell: cmd
 
       - name: Compile Game
-        run: |
-          set HAXE_FIX=1
-          haxelib run lime build windows -release -D next -D no-deprecation-warnings
+        run: haxelib run lime build windows -release -v -D legacy
         shell: cmd
 
       - name: Upload Artifact
