@@ -32,14 +32,9 @@ jobs:
           haxelib run lime setup
         shell: cmd
 
-      - name: Fix HXP Library
-        run: |
-          powershell -Command "$path = (haxelib libpath hxp).Trim() + 'src/hxp/HXP.hx'; if (Test-Path $path) { (Get-Content $path) -replace ' \?', '' | Set-Content $path }"
-          powershell -Command "$path = (haxelib libpath hxp).Trim() + 'src/hxp/HXML.hx'; if (Test-Path $path) { (Get-Content $path) -replace ' \?', '' | Set-Content $path }"
-        shell: cmd
-
       - name: Compile Game
-        run: haxelib run lime build windows -release -D no-deprecation-warnings
+        run: |
+          haxelib run lime build windows -release -D no-deprecation-warnings --haxeflag "--macro allowPackage('flash')" --haxeflag "--no-inline"
         shell: cmd
 
       - name: Upload Artifact
