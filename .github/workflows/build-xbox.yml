@@ -33,7 +33,9 @@ jobs:
         shell: cmd
 
       - name: Compile Game
-        run: haxelib run lime build windows -release --haxeflag "--macro nullSafety('off')"
+        run: |
+          set HAXE_FIX=1
+          haxelib run lime build windows -release -D next -D no-deprecation-warnings
         shell: cmd
 
       - name: Upload Artifact
