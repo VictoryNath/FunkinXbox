@@ -31,7 +31,6 @@ jobs:
           haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git
           haxelib git grig.audio https://github.com/grig-org/grig.audio.git
           haxelib run lime setup
-          haxelib run flixel-tools setup -y
         shell: cmd
 
       - name: Compile Game
@@ -40,5 +39,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
+          name: FridayNightFunkin-Xbox
+          path: export/release/windows/bin
           name: FridayNightFunkin-Xbox
           path: export/release/windows/bin
