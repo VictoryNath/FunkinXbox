@@ -33,7 +33,15 @@ jobs:
         shell: cmd
 
       - name: Compile Game
-        run: haxelib run lime build windows -release -v -D legacy
+        run: |
+          haxelib run lime build windows -release -v -D no-deprecation-warnings --haxeflag "--macro allowPackage('flash')"
+        shell: cmd
+        continue-on-error: true
+
+      - name: Final Emergency Patch and Rebuild
+        run: |
+          powershell -Command "Get-ChildItem -Path $env:TEMP -Filter Project.hx -Recurse | ForEach-Object { (Get-Content $_.FullName) -replace ' \?', '' | Set-Content $_.FullName }"
+          haxelib run lime build windows -release
         shell: cmd
 
       - name: Upload Artifact
