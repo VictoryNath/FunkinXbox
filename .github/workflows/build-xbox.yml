@@ -17,10 +17,10 @@ jobs:
       with:
         haxe-version: 4.2.5
 
-    - name: Install Dependencies
+    - name: Install Corrected Libraries
       shell: cmd
       run: |
-        haxelib install lime 7.9.0
+        haxelib git lime https://github.com/mcagabe19/lime.git
         haxelib install openfl 9.1.0
         haxelib install flixel 5.2.2
         haxelib install flixel-addons 3.0.2
@@ -43,7 +43,7 @@ jobs:
     - name: Export UWP project
       shell: cmd
       run: |
-        haxelib run lime build windows -uwp -release -D official_build --haxeflag "--no-inline" --haxeflag "-D no-null-safety"
+        haxelib run lime build windows -uwp -release -D official_build
         
     - name: Upload project
       uses: actions/upload-artifact@v4
