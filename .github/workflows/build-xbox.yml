@@ -31,11 +31,10 @@ jobs:
           haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git
           haxelib git grig.audio https://github.com/grig-org/grig.audio.git
           haxelib run lime setup
-          echo y | haxelib run flixel-tools setup
+          echo y > input.txt
+          echo n >> input.txt
+          type input.txt | haxelib run flixel-tools setup
         shell: cmd
-
-      - name: Compile Game
-        run: haxelib run lime build windows -release -D official_build
 
       - name: Compile Game
         run: haxelib run lime build windows -release -D official_build
