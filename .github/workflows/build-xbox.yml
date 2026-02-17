@@ -15,43 +15,38 @@ jobs:
     - name: Setup Haxe
       uses: krdlab/setup-haxe@v1
       with:
-        haxe-version: 4.3.4
+        haxe-version: 4.2.5
 
     - name: Install Haxelib dependencies
       shell: cmd
       run: |
-        haxelib install lime
-        haxelib install openfl
-        haxelib install flixel
-        haxelib install flixel-addons
-        haxelib install flixel-ui
-        haxelib install hscript
+        haxelib install lime 7.9.0
+        haxelib install openfl 9.1.0
+        haxelib install flixel 5.2.2
+        haxelib install flixel-addons 3.0.2
+        haxelib install flixel-ui 2.5.0
+        haxelib install hscript 2.5.0
         haxelib install tjson
-        haxelib install hxcpp
-        haxelib install hxp
-        haxelib run hxcpp build
-
+        haxelib install hxcpp 4.2.1
+        haxelib install hxp 1.1.2
         haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git
         haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git
         haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git
         haxelib git grig.audio https://github.com/grig-org/grig.audio.git
-
         haxelib run lime setup
 
-    # initialise l'environnement Visual Studio (CRUCIAL)
     - name: Setup MSVC
       uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: x64
 
-    # on exporte seulement le projet UWP
     - name: Export UWP project
       shell: cmd
       run: |
-        haxelib run lime build windows -Duwp -Dno-compilation
+        haxelib run lime build windows -uwp -release -D official_build
 
     - name: Upload project
       uses: actions/upload-artifact@v4
       with:
         name: Funkin-UWP-Project
-        path: export/windows/uwp
+        path: export/release/windows/uwp/bin
