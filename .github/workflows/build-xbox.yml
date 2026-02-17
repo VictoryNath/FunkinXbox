@@ -36,16 +36,26 @@ jobs:
         haxelib git grig.audio https://github.com/grig-org/grig.audio.git --quiet
         haxelib run lime setup
 
-    - name: Remove Problematic HXP File
+    - name: Sanitize Project Script
       shell: pwsh
       run: |
-        if (Test-Path "project.hxp") {
-            Remove-Item "project.hxp" -Force
-            Write-Host "Suppressed project.hxp to force XML usage."
-        }
-        if (Test-Path "Project.hxp") {
-            Remove-Item "Project.hxp" -Force
-            Write-Host "Suppressed Project.hxp to force XML usage."
+        $path = "project.hxp"
+        if (Test-Path $path) {
+            Write-Host "Found project.hxp. Patching for Haxe 4.2.5 compatibility..."
+            $content = Get-Content $path -Raw
+            
+            # Remplace le 'Safe Navigation' (?. -> .)
+            # Ex: object?.field devient object.field
+            $content = $content -replace '\?\.', '.'
+            
+            # Remplace le 'Null Coalescing' (?? -> ||)
+            # Ex: value ?? default devient value || default
+            $content = $content -replace '\?\?', '||'
+            
+            Set-Content -Path $path -Value $content
+            Write-Host "Patch applied successfully."
+        } else {
+            Write-Host "Warning: project.hxp not found in root."
         }
 
     - name: Setup MSVC
