@@ -17,7 +17,7 @@ jobs:
 
       - name: Install Libraries
         run: |
-          haxelib install lime 7.9.0
+          haxelib install lime 7.8.0
           haxelib install openfl 9.1.0
           haxelib install flixel 5.2.2
           haxelib install flixel-addons 3.0.2
@@ -33,8 +33,7 @@ jobs:
         shell: cmd
 
       - name: Compile Game
-        run: |
-          haxelib run lime build windows -release -D no-deprecation-warnings --haxeflag "--macro allowPackage('flash')" --haxeflag "--no-inline"
+        run: haxelib run lime build windows -release -D official_build
         shell: cmd
 
       - name: Upload Artifact
