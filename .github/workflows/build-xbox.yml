@@ -17,10 +17,12 @@ jobs:
       with:
         haxe-version: 4.2.5
 
-    - name: Install Corrected Libraries
+    - name: Install Dependencies
       shell: cmd
       run: |
-        haxelib git lime https://github.com/mcagabe19/lime.git
+        git config --global http.postBuffer 524288000
+        git config --global core.compression 0
+        haxelib install lime 7.9.0
         haxelib install openfl 9.1.0
         haxelib install flixel 5.2.2
         haxelib install flixel-addons 3.0.2
@@ -29,10 +31,10 @@ jobs:
         haxelib install tjson
         haxelib install hxcpp 4.2.1
         haxelib install hxp 1.1.2
-        haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git
-        haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git
-        haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git
-        haxelib git grig.audio https://github.com/grig-org/grig.audio.git
+        haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git --quiet
+        haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git --quiet
+        haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git --quiet
+        haxelib git grig.audio https://github.com/grig-org/grig.audio.git --quiet
         haxelib run lime setup
 
     - name: Setup MSVC
@@ -43,7 +45,7 @@ jobs:
     - name: Export UWP project
       shell: cmd
       run: |
-        haxelib run lime build windows -uwp -release -D official_build
+        haxelib run lime build windows -uwp -release -D official_build --haxeflag "-D no-null-safety"
         
     - name: Upload project
       uses: actions/upload-artifact@v4
