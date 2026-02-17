@@ -17,24 +17,33 @@ jobs:
       with:
         haxe-version: 4.2.5
 
-    - name: Install Legacy Dependencies
+    - name: Install Dependencies
       shell: cmd
       run: |
         git config --global http.postBuffer 524288000
-        haxelib install lime 7.6.3
+        haxelib install lime 7.9.0
         haxelib install openfl 9.1.0
-        haxelib install flixel 4.11.0
-        haxelib install flixel-addons 2.11.0
-        haxelib install flixel-ui 2.4.0
-        haxelib install hscript 2.4.0
+        haxelib install flixel 5.2.2
+        haxelib install flixel-addons 3.0.2
+        haxelib install flixel-ui 2.5.0
+        haxelib install hscript 2.5.0
         haxelib install tjson
         haxelib install hxcpp 4.2.1
-        haxelib install hxp 1.1.0
+        haxelib install hxp 1.1.2
         haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git --quiet
         haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git --quiet
         haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git --quiet
         haxelib git grig.audio https://github.com/grig-org/grig.audio.git --quiet
         haxelib run lime setup
+
+    - name: Patch HXP Library
+      shell: pwsh
+      run: |
+        $hxpPath = (haxelib libpath hxp).Trim() + "src/hxp/HXP.hx"
+        if (Test-Path $hxpPath) {
+          (Get-Content $hxpPath) -replace ' \?', '' | Set-Content $hxpPath
+          Write-Host "HXP Patched successfully!"
+        }
 
     - name: Setup MSVC
       uses: ilammy/msvc-dev-cmd@v1
@@ -44,7 +53,7 @@ jobs:
     - name: Export UWP project
       shell: cmd
       run: |
-        haxelib run lime build windows -uwp -release -v
+        haxelib run lime build windows -uwp -release -D official_build
         
     - name: Upload project
       uses: actions/upload-artifact@v4
