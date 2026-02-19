@@ -1,43 +1,65 @@
-name: Build FNF 0.8.1 for Xbox
-on: [push]
+name: Build UWP Project
+
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
 
-      - name: Setup Haxe
-        uses: krdlab/setup-haxe@v1
-        with:
-          haxe-version: 4.2.4
+    # récupère le repo + submodules
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
 
-      - name: Install Libraries
-        run: |
-          haxelib install lime 7.9.0
-          haxelib install openfl 9.1.0
-          haxelib install flixel 5.2.2
-          haxelib install flixel-addons 3.0.2
-          haxelib install flixel-ui 2.5.0
-          haxelib install hscript 2.5.0
-          haxelib install tjson
-          haxelib install hxp 1.1.2
-          haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git
-          haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git
-          haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git
-          haxelib git grig.audio https://github.com/grig-org/grig.audio.git
-          haxelib run lime setup
-        shell: cmd
+    # installe Haxe moderne (important)
+    - name: Setup Haxe
+      uses: krdlab/setup-haxe@v1
+      with:
+        haxe-version: 4.3.4
 
-      - name: Compile Game
-        run: haxelib run lime build windows -release -D official_build --haxeflag "--no-inline"
-        shell: cmd
+    # installe toutes les libs FNF
+    - name: Install Haxelib dependencies
+      shell: cmd
+      run: |
+        haxelib install lime
+        haxelib install openfl
+        haxelib install flixel
+        haxelib install flixel-addons
+        haxelib install flixel-ui
+        haxelib install hscript
+        haxelib install tjson
+        haxelib install hxcpp
+        haxelib install hxp
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: FridayNightFunkin-Xbox
-          path: export/release/windows/bin
+        haxelib run hxcpp build
+
+        haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git
+        haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git
+        haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git
+        haxelib git grig.audio https://github.com/grig-org/grig.audio.git
+
+        haxelib run lime setup
+
+    # initialise MSVC (sinon hxcpp ne détecte pas le toolchain)
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+
+    # export projet UWP (sans compilation native)
+    - name: Export UWP project
+      shell: cmd
+      run: |
+        haxelib run lime build windows -Duwp -Dno-compilation
+
+    # upload artefact téléchargeable
+    - name: Upload UWP project
+      uses: actions/upload-artifact@v4
+      with:
+        name: Funkin-UWP-Project
+        path: export/windows/uwp
