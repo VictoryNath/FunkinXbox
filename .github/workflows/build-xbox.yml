@@ -21,29 +21,30 @@ jobs:
       uses: krdlab/setup-haxe@v1
       with:
         haxe-version: 4.3.4
-
+        
+        
+        
     - name: Reset haxelib repo
       shell: cmd
       run: |
         rmdir /s /q C:\haxelib || echo skip
         mkdir C:\haxelib
         haxelib setup C:\haxelib
-
-    # installe toutes les libs FNF
-    - name: Install Haxelib dependencies
+    
+    
+    - name: Install dependencies
       shell: cmd
       run: |
-        haxelib git lime https://github.com/openfl/lime.git
-        haxelib git openfl https://github.com/openfl/openfl.git
-        haxelib dev lime
-        haxelib dev openfl
+        haxelib git lime https://github.com/openfl/lime.git develop
+        haxelib git openfl https://github.com/openfl/openfl.git develop
+
+        haxelib install hxcpp
         haxelib install flixel
         haxelib install flixel-addons
         haxelib install flixel-ui
         haxelib install hscript
         haxelib install tjson
         haxelib install format
-        haxelib install hxcpp
         haxelib install hxp
 
         haxelib run hxcpp build
