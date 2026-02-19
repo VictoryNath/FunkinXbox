@@ -28,12 +28,14 @@ jobs:
       run: |
         haxelib git lime https://github.com/openfl/lime.git
         haxelib git openfl https://github.com/openfl/openfl.git
+        haxelib dev lime
+        haxelib dev openfl
         haxelib install flixel
         haxelib install flixel-addons
         haxelib install flixel-ui
-        haxelib install format
         haxelib install hscript
         haxelib install tjson
+        haxelib install format
         haxelib install hxcpp
         haxelib install hxp
 
