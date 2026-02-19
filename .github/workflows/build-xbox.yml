@@ -30,13 +30,17 @@ jobs:
         rmdir /s /q C:\haxelib || echo skip
         mkdir C:\haxelib
         haxelib setup C:\haxelib
-    
-    
+
     - name: Install dependencies
       shell: cmd
       run: |
+        haxelib remove lime || echo skip
+        haxelib remove openfl || echo skip
+
         haxelib git lime https://github.com/openfl/lime.git develop
         haxelib git openfl https://github.com/openfl/openfl.git develop
+
+        haxelib list
 
         haxelib install hxcpp
         haxelib install flixel
