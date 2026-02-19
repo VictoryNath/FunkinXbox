@@ -1,57 +1,63 @@
 name: Build UWP Project (FNF 0.8.1)
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: true
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    - name: Setup Haxe
-      uses: krdlab/setup-haxe@v1
-      with:
-        haxe-version: 4.3.4 # Obligatoire pour la V-Slice (v0.8.1)
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.3.4 # Requis pour le Null-Safety (?.) de la v0.8.1
 
-    - name: Install Libraries
-      shell: cmd
-      run: |
-        :: Installation des versions compatibles avec la V-Slice
-        haxelib install lime 8.1.2
-        haxelib install openfl 9.3.3
-        haxelib install flixel 5.6.2
-        haxelib install flixel-addons 3.2.1
-        haxelib install flixel-ui 2.6.0
-        haxelib install hscript 2.5.0
-        haxelib install tjson 1.4.0
-        haxelib install hxcpp 4.3.2
-        haxelib install hxp 1.3.0
-        
-        :: Correction des repos Git (URLs exactes pour v0.8.1)
-        haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git --never
-        haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git --never
-        haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git --never
-        haxelib git grig.audio https://github.com/grig-org/grig.audio.git --never
-        
-        haxelib run lime setup
+      - name: Install Libraries
+        shell: cmd
+        run: |
+          :: Installation des versions stables pour la V-Slice
+          haxelib install lime 8.1.2 --always
+          haxelib install openfl 9.3.3 --always
+          haxelib install flixel 5.6.2 --always
+          haxelib install flixel-addons 3.2.1 --always
+          haxelib install flixel-ui 2.6.0 --always
+          haxelib install hscript 2.5.0 --always
+          haxelib install tjson 1.4.0 --always
+          haxelib install hxcpp 4.3.2 --always
+          haxelib install hxp 1.3.0 --always
+          
+          :: Installation des dépôts Git (URLs corrigées pour éviter les erreurs de clone)
+          haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate.git --never
+          haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git --never
+          haxelib git funkin.vis https://github.com/FunkinCrew/funkin.vis.git --never
+          haxelib git grig.audio https://github.com/grig-org/grig.audio.git --never
+          
+          :: Configuration de Lime
+          haxelib run lime setup
 
-    - name: Setup MSVC (Visual Studio)
-      uses: ilammy/msvc-dev-cmd@v1
-      with:
-        arch: x64
+      - name: Setup MSVC (Visual Studio)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
-    - name: Build UWP
-      shell: cmd
-      run: |
-        :: Pour la Xbox/UWP, on utilise la cible uwp directe
-        haxelib run lime build uwp -release -D official_build
-        
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: FNF-Xbox-UWP
-        path: export/release/uwp/bin
+      - name: Build UWP (Xbox)
+        shell: cmd
+        run: |
+          :: Compilation spécifique pour la plateforme UWP
+          haxelib run lime build uwp -release -D official_build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FNF-V-Slice-Xbox
+          path: export/release/uwp/bin
